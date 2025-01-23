@@ -1,30 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playlist] etc.
+import 'package:media_kit_demo/server/video_cache_server.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
 
+  getApplicationCacheDirectory().then((value) async {
+    await VideoCacheServer(cacheRoot: value.path).start();
+  });
+
   runApp(
     const MaterialApp(
-      home: MyScreen(),
+      home: MyApp(),
     ),
   );
 }
 
-class MyScreen extends StatefulWidget {
-  const MyScreen({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  State<MyScreen> createState() => MyScreenState();
+  State<MyApp> createState() => MyAppState();
 }
 
-class MyScreenState extends State<MyScreen> {
+class MyAppState extends State<MyApp> {
   // Create a [Player] to control playback.
   late final player = Player(
-    configuration: const PlayerConfiguration(bufferSize: 1024 * 1024, logLevel: MPVLogLevel.trace),
+    configuration: const PlayerConfiguration(
+        bufferSize: 1024 * 1024, logLevel: MPVLogLevel.trace),
   );
+
   // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
 
@@ -42,7 +51,8 @@ class MyScreenState extends State<MyScreen> {
   void initState() {
     super.initState();
     // Play a [Media] or [Playlist].
-    final playlist = Playlist(urls.map((e) => Media(e)).toList(growable: false));
+    final playlist =
+        Playlist(urls.map((e) => Media(e)).toList(growable: false));
     player.setPlaylistMode(PlaylistMode.loop);
     player.open(playlist);
   }

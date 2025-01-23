@@ -5,6 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Dart",
+            "type": "dart",
+            "request": "launch",
+        },
+        {
             "name": "media_kit_demo",
             "request": "launch",
             "type": "dart"
