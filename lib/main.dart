@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playlist] etc.
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'server/video_cache_server.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
+
+  getApplicationCacheDirectory().then(
+    (dir) async {
+      await VideoCacheServer(
+        cacheDir: dir.path,
+        port: 8080,
+      ).start();
+    }
+  );
 
   runApp(
     const MaterialApp(
