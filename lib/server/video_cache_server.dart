@@ -27,6 +27,12 @@ class VideoCacheServer {
       _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
       print('$_logPrefix Video cache server successfully started on port $port');
       print('$_logPrefix Cache root directory: ${cacheManager.cacheRoot}');
+
+      // Add request handling loop
+      await for (final request in _server!) {
+        _handleRequest(request);
+      }
+
     } catch (e, stackTrace) {
       print('$_logPrefix [ERROR] Failed to start video cache server: $e');
       print(stackTrace);
