@@ -23,7 +23,10 @@ class MyScreen extends StatefulWidget {
 class MyScreenState extends State<MyScreen> {
   // Create a [Player] to control playback.
   late final player = Player(
-    configuration: const PlayerConfiguration(bufferSize: 1024 * 1024, logLevel: MPVLogLevel.trace),
+    configuration: const PlayerConfiguration(
+      bufferSize: 1024 * 1024,
+      logLevel: MPVLogLevel.trace,
+    ),
   );
   // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
